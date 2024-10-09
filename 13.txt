@@ -1,0 +1,16 @@
+SELECT `AdminClub`.`AdminName`,
+`AdminClub`.`#AdminClub`
+FROM`AdminClub`
+WHERE
+`AdminClub`.`#AdminClub`= '1';
+
+SELECT `Club`.`Description`,
+`Club`.`ClubName`
+FROM `Club`
+`Club`.`ClubName`= '1';
+
+SELECT `student`.`studname`,
+`student`.`#student`
+FROM `student`
+WHERE 
+`student`.`#student` = '2'

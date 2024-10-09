@@ -1,0 +1,128 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema ryb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema ryb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `ryb` DEFAULT CHARACTER SET utf8 ;
+USE `ryb` ;
+
+-- -----------------------------------------------------
+-- Table `ryb`.`Club`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb`.`Club` (
+  `#Club` INT NOT NULL AUTO_INCREMENT,
+  `ClubName` VARCHAR(45) NOT NULL,
+  `Description` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`#Club`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb`.`Education`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb`.`Education` (
+  `#Education` INT NOT NULL,
+  `Day` VARCHAR(45) NOT NULL,
+  `Audit` INT NOT NULL,
+  `Educationcol` TIME NOT NULL,
+  PRIMARY KEY (`#Education`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb`.`AdminClub`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb`.`AdminClub` (
+  `#AdminClub` INT NOT NULL,
+  `Adminname` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`#AdminClub`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb`.`Students`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb`.`Students` (
+  `#Students` INT NOT NULL,
+  `Studname` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`#Students`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb`.`Students_has_AdminClub`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb`.`Students_has_AdminClub` (
+  `Students_#Students` INT NOT NULL,
+  `AdminClub_#AdminClub` INT NOT NULL,
+  PRIMARY KEY (`Students_#Students`, `AdminClub_#AdminClub`),
+  INDEX `fk_Students_has_AdminClub_AdminClub1_idx` (`AdminClub_#AdminClub` ASC) VISIBLE,
+  INDEX `fk_Students_has_AdminClub_Students_idx` (`Students_#Students` ASC) VISIBLE,
+  CONSTRAINT `fk_Students_has_AdminClub_Students`
+    FOREIGN KEY (`Students_#Students`)
+    REFERENCES `ryb`.`Students` (`#Students`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Students_has_AdminClub_AdminClub1`
+    FOREIGN KEY (`AdminClub_#AdminClub`)
+    REFERENCES `ryb`.`AdminClub` (`#AdminClub`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb`.`Students_has_Club`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb`.`Students_has_Club` (
+  `Students_#Students` INT NOT NULL,
+  `Club_#Club` INT NOT NULL,
+  PRIMARY KEY (`Students_#Students`, `Club_#Club`),
+  INDEX `fk_Students_has_Club_Club1_idx` (`Club_#Club` ASC) VISIBLE,
+  INDEX `fk_Students_has_Club_Students1_idx` (`Students_#Students` ASC) VISIBLE,
+  CONSTRAINT `fk_Students_has_Club_Students1`
+    FOREIGN KEY (`Students_#Students`)
+    REFERENCES `ryb`.`Students` (`#Students`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Students_has_Club_Club1`
+    FOREIGN KEY (`Club_#Club`)
+    REFERENCES `ryb`.`Club` (`#Club`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb`.`Education_has_Club`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb`.`Education_has_Club` (
+  `Education_#Education` INT NOT NULL,
+  `Club_#Club` INT NOT NULL,
+  PRIMARY KEY (`Education_#Education`, `Club_#Club`),
+  INDEX `fk_Education_has_Club_Club1_idx` (`Club_#Club` ASC) VISIBLE,
+  INDEX `fk_Education_has_Club_Education1_idx` (`Education_#Education` ASC) VISIBLE,
+  CONSTRAINT `fk_Education_has_Club_Education1`
+    FOREIGN KEY (`Education_#Education`)
+    REFERENCES `ryb`.`Education` (`#Education`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Education_has_Club_Club1`
+    FOREIGN KEY (`Club_#Club`)
+    REFERENCES `ryb`.`Club` (`#Club`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
