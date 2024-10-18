@@ -1,0 +1,136 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema ryb3
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema ryb3
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `ryb3` DEFAULT CHARACTER SET utf8 ;
+USE `ryb3` ;
+
+-- -----------------------------------------------------
+-- Table `ryb3`.`admins`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb3`.`admins` (
+  `#admins` INT NOT NULL AUTO_INCREMENT,
+  `adminname` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`#admins`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb3`.`club`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb3`.`club` (
+  `#club` INT NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(45) NOT NULL,
+  `nameclub` VARCHAR(45) NOT NULL,
+  `admins_#admins` INT NOT NULL,
+  PRIMARY KEY (`#club`),
+  INDEX `fk_club_admins1_idx` (`admins_#admins` ASC) VISIBLE,
+  CONSTRAINT `fk_club_admins1`
+    FOREIGN KEY (`admins_#admins`)
+    REFERENCES `ryb3`.`admins` (`#admins`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb3`.`type lesson`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb3`.`type lesson` (
+  `#typelesson` INT NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(45) NOT NULL,
+  `day` VARCHAR(45) NOT NULL,
+  `audit` INT NOT NULL,
+  `time` TIME NOT NULL,
+  PRIMARY KEY (`#typelesson`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb3`.`students`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb3`.`students` (
+  `#students` INT NOT NULL AUTO_INCREMENT,
+  `studname` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`#students`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb3`.`type lesson_has_club`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb3`.`type lesson_has_club` (
+  `type lesson_#typelesson` INT NOT NULL,
+  `club_#club` INT NOT NULL,
+  PRIMARY KEY (`type lesson_#typelesson`, `club_#club`),
+  INDEX `fk_type lesson_has_club_club1_idx` (`club_#club` ASC) VISIBLE,
+  INDEX `fk_type lesson_has_club_type lesson_idx` (`type lesson_#typelesson` ASC) VISIBLE,
+  CONSTRAINT `fk_type lesson_has_club_type lesson`
+    FOREIGN KEY (`type lesson_#typelesson`)
+    REFERENCES `ryb3`.`type lesson` (`#typelesson`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_type lesson_has_club_club1`
+    FOREIGN KEY (`club_#club`)
+    REFERENCES `ryb3`.`club` (`#club`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb3`.`students_has_admins`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb3`.`students_has_admins` (
+  `students_#students` INT NOT NULL,
+  `admins_#admins` INT NOT NULL,
+  PRIMARY KEY (`students_#students`, `admins_#admins`),
+  INDEX `fk_students_has_admins_admins1_idx` (`admins_#admins` ASC) VISIBLE,
+  INDEX `fk_students_has_admins_students1_idx` (`students_#students` ASC) VISIBLE,
+  CONSTRAINT `fk_students_has_admins_students1`
+    FOREIGN KEY (`students_#students`)
+    REFERENCES `ryb3`.`students` (`#students`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_students_has_admins_admins1`
+    FOREIGN KEY (`admins_#admins`)
+    REFERENCES `ryb3`.`admins` (`#admins`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ryb3`.`students_has_club`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ryb3`.`students_has_club` (
+  `students_#students` INT NOT NULL,
+  `club_#club` INT NOT NULL,
+  PRIMARY KEY (`students_#students`, `club_#club`),
+  INDEX `fk_students_has_club_club1_idx` (`club_#club` ASC) VISIBLE,
+  INDEX `fk_students_has_club_students1_idx` (`students_#students` ASC) VISIBLE,
+  CONSTRAINT `fk_students_has_club_students1`
+    FOREIGN KEY (`students_#students`)
+    REFERENCES `ryb3`.`students` (`#students`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_students_has_club_club1`
+    FOREIGN KEY (`club_#club`)
+    REFERENCES `ryb3`.`club` (`#club`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -1,0 +1,14 @@
+SELECT * FROM `ryb3`.`club`;
+
+SELECT type, day FROM `ryb3`.`type lesson`;
+
+SELECT 
+    nameclub, studname
+FROM
+    `ryb3`.`club`,
+    `ryb3`.`students_has_club`,
+    `ryb3`.`students`
+WHERE
+    `club`.`idclub` = `students_has_club`.`club_#club`
+        AND `students`.`idstudents` = `students_has_club`.`students_#students`
+        AND `club`.`nameclub` IN ('шахматы' , 'волейбол')
